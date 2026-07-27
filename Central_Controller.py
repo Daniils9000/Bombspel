@@ -8,6 +8,16 @@ import framebuf
 import time
 import random
 from machine import Pin
+import utime
+from ssd1306 import SSD1306_I2C
+
+i2c = machine.I2C(sda=Pin(16), scl=Pin(17))
+print(i2c.scan())
+
+
+from ssd1306 import SSD1306_I2C
+oled = SSD1306_I2C(128, 64, i2c)
+
 
 Module_1 = Pin(9, Pin.IN) 
 Module_2 = Pin(11, Pin.IN)
@@ -25,11 +35,11 @@ Completed_5 = Pin(19, Pin.IN)
 
 
 Module_list = [Module_1, Module_2, Module_3, Module_4, Module_5] #Lista med alla moduler, kopplade och okopplade
-Connected_modules = []
 Mistake_list = [] 
 
 
 def Connected_Modules(): 
+    Connected_modules = []
     for i in range(0,len(Module_list)): #checkar vilka moduler är inkopplade och skapar en lista som representerar detta, om inkopplade moduler = 1, 3, 4, då blir listan [1,0,1,1,0]...
 
         if Module_list[i].value() == 1:   #så kan man sen jämföra tex om bomben är klar genom att se om avklarade modul listan är samma som modul listan
@@ -40,7 +50,7 @@ def Connected_Modules():
     return Connected_modules
         
 
-def Completed_modules():
+def Completed_Modules():
     Completed_list = [Completed_1.value(), Completed_2.value(), Completed_3.value(), Completed_4.value(), Completed_5.value()] #Skapar en lista med värden 0 och 1 som man kan sen jämföra med "kopplade moduler" listan                                                                                                      # är dem samma så är bomben löst, för alla tillgängliga moduler är lösta liksom, 
     return Completed_list                                                                                                      #Behöver checkas hela tiden så är innuti funktionen
 
@@ -48,6 +58,7 @@ def Solved(Completed_list, Connected_modules):
     if Completed_list == Connected_modules: #Jämför Klara moduler med kopplade moduler, är alla moduler som är kopplade klara? Ja -> bomben e löst
         #gör nått här idunno
         print("Bomb is solved")
+        return 1
 
 def Mistakes():
     if Mistake_pin.value() == 1: #när pico pinen kopplad till mistag pinnen på modulerna är HIGH -> Lägg till ett misstag till listan 
@@ -56,22 +67,135 @@ def Mistakes():
  
 def Boom(Mistakes):
     if Mistakes == 3: # Om 3 misstag sker ger den ut en etta
-        return 1
-
-x = 0
-
-while x != 1:
-    Number_of_Mistakes = Mistakes()
-    print(Mistake_list,Number_of_Mistakes,"number of mistakes") #Bara test, men insåg här att det är viktigt att ha delay, typ 0.2 sekunder för annars blir 1 misstag = 1000 misstag, man ska ge den tid att hinna registrera
-    time.sleep(0.2)
-    print(Boom(Number_of_Mistakes))
-    if Boom(Number_of_Mistakes) == 1:
-        x = 1
-print("Boom")
-
+        return 0 #stänger av spelet
 
 
 #print("Connected Modules:", Connected_Modules()) # printar vilka moduler är inkopplade
 #print("Completed Modules:", Completed_modules()) # printar vilka moduler är avklarade
 #Solved(Completed_modules(),Connected_Modules())
 #ha en loop som minskar sekunder och när sekunder blir noll minskar minuter, när minuter och sekunder == 0, boom. varför så? för varje sekund kan man checka för misstag?? lowkey dålig ide men en ide! lol
+
+#ta bort detta sen ofc
+
+
+
+
+def tid(m,s,start_tid,Game): #minuter och sekunder som input 
+
+    s_x_placement = 16    #66 
+    s_y_placement = 10    #30 säger var klockan är på skärmen
+    m_x_placement = 0   #50
+    m_y_placement = s_y_placement
+
+    if Game == 1:
+        Passerad_tid = utime.ticks_ms() 
+        runtime = utime.ticks_diff(Passerad_tid,start_tid)
+        #print(runtime)
+
+        if m != 0 and s >= 10:
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 1)
+            oled.text(str(s), s_x_placement, s_y_placement, 1)
+            oled.show()
+            if runtime >= 1000:
+                print("en sekund har gått")
+                start_tid = utime.ticks_ms()
+                oled.text(str(s), s_x_placement, s_y_placement, 0)
+                oled.show()
+                s = s - 1
+            return m,s,start_tid,Game
+        
+            
+        elif m != 0 and s <= 9 and s != 0:
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 1)
+            oled.text("0" + str(s), s_x_placement, s_y_placement, 1)
+            oled.show()
+            if runtime >= 1000:
+                print("en sekund har gått")
+                start_tid = utime.ticks_ms()
+                oled.text("0" + str(s), s_x_placement, s_y_placement, 0)
+                oled.show()
+                s = s - 1
+            return m,s,start_tid,Game
+
+        elif m != 0 and s == 0:
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 1)
+            oled.text("0" + str(s), s_x_placement, s_y_placement, 1)
+            oled.show()
+            if runtime >= 1000:
+                print("en sekund har gått")
+                start_tid = utime.ticks_ms()
+                oled.text("0" + str(s), s_x_placement, s_y_placement, 0)
+                oled.show()
+                s = 59
+                oled.text(str(m) + ":", m_x_placement , m_y_placement, 0)
+                m = m - 1
+            return m,s,start_tid
+            
+        elif m == 0 and s >= 10:
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 1)
+            oled.text(str(s), s_x_placement, s_y_placement, 1)
+            oled.show()
+            if runtime >= 1000:
+                print("en sekund har gått")
+                start_tid = utime.ticks_ms()
+                oled.text(str(s), s_x_placement, s_y_placement, 0)
+                oled.show()
+                s = s - 1
+            return m,s,start_tid,Game
+            
+        elif m == 0 and s <= 9 and s != 0:
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 1)
+            oled.text("0" + str(s), s_x_placement, s_y_placement, 1)
+            oled.show()
+            if runtime >= 1000:
+                print("en sekund har gått")
+                start_tid = utime.ticks_ms()
+                oled.text("0" + str(s), s_x_placement, s_y_placement, 0)
+                oled.show()
+                s = s - 1
+            return m,s,start_tid,Game
+        
+        elif m == 0 and s == 0:
+            Game = 0
+            oled.text(str(m) + ":", m_x_placement , m_y_placement, 0)
+            oled.text("BOOM", 45, 29, 1)
+            oled.show()
+            print("Boom")
+            return m,s,start_tid,Game
+
+def main(minuter, sekunder):
+    Game = 1
+    start_tid = utime.ticks_ms()
+    while Game == 1:
+        print("new loop")
+        print(Connected_Modules())
+        antal_misstag = Mistakes()
+        if Solved(Completed_Modules(), Connected_Modules()) == 1:
+            Game = 0
+            oled.fill(0)
+            oled.show
+            for i in range(0,5):
+                oled.text("Win", 0, 0, 1)
+                oled.show()
+                time.sleep(0.7)
+                oled.text("Win", 0, 0, 0)
+                oled.show()
+                time.sleep(0.7)
+                i = i + 1
+
+        elif antal_misstag == 3:
+            Game = 0
+            oled.text("Boom",0,0,1)
+            oled.show
+
+        else:
+            tiden = tid(minuter,sekunder,start_tid,Game)
+            minuter = tiden[0] #type: ignore
+            sekunder = tiden[1] #type: ignore
+            start_tid = tiden[2] #type: ignore
+            Game = tiden[3] #type: ignore
+
+            
+#main(0,10) #minuter sekunder
+while True:
+    print(Connected_Modules())
