@@ -58,20 +58,10 @@ def Boom(Mistakes):
     if Mistakes == 3: # Om 3 misstag sker ger den ut en etta
         return 1
 
-x = 0
-
-while x != 1:
-    Number_of_Mistakes = Mistakes()
-    print(Mistake_list,Number_of_Mistakes,"number of mistakes") #Bara test, men insåg här att det är viktigt att ha delay, typ 0.2 sekunder för annars blir 1 misstag = 1000 misstag, man ska ge den tid att hinna registrera
-    time.sleep(0.2)
-    print(Boom(Number_of_Mistakes))
-    if Boom(Number_of_Mistakes) == 1:
-        x = 1
-print("Boom")
-
-
 
 #print("Connected Modules:", Connected_Modules()) # printar vilka moduler är inkopplade
 #print("Completed Modules:", Completed_modules()) # printar vilka moduler är avklarade
 #Solved(Completed_modules(),Connected_Modules())
 #ha en loop som minskar sekunder och när sekunder blir noll minskar minuter, när minuter och sekunder == 0, boom. varför så? för varje sekund kan man checka för misstag?? lowkey dålig ide men en ide! lol
+
+#ta bort detta sen ofc
