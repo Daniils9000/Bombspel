@@ -29,7 +29,7 @@ Connected_modules = []
 Mistake_list = [] 
 
 
-def Module_connection_check(): 
+def Connected_Modules(): 
     for i in range(0,len(Module_list)): #checkar vilka moduler är inkopplade och skapar en lista som representerar detta, om inkopplade moduler = 1, 3, 4, då blir listan [1,0,1,1,0]...
 
         if Module_list[i].value() == 1:   #så kan man sen jämföra tex om bomben är klar genom att se om avklarade modul listan är samma som modul listan
@@ -71,7 +71,7 @@ print("Boom")
 
 
 
-#print("Connected Modules:", Module_connection_check()) # printar vilka moduler är inkopplade
+#print("Connected Modules:", Connected_Modules()) # printar vilka moduler är inkopplade
 #print("Completed Modules:", Completed_modules()) # printar vilka moduler är avklarade
-#Solved(Completed_modules(),Module_connection_check())
+#Solved(Completed_modules(),Connected_Modules())
 #ha en loop som minskar sekunder och när sekunder blir noll minskar minuter, när minuter och sekunder == 0, boom. varför så? för varje sekund kan man checka för misstag?? lowkey dålig ide men en ide! lol
