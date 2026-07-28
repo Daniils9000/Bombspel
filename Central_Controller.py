@@ -37,6 +37,12 @@ completed_5 = Pin(19, Pin.IN)
 module_list = [module_1, module_2, module_3, module_4, module_5] #Lista med alla moduler, kopplade och okopplade
 mistake_list = [] 
 
+buf = bytearray(128 * 64 // 8) #skapar en kanvas för buffern basically
+
+Buffer = framebuf.FrameBuffer(buf, 128, 64, framebuf.MONO_HLSB) #buffer där man skriver saker i och sedan gör dem sakerna större med scale()
+
+
+
 
 def connected_modules(): 
     connected_modules_list = []
@@ -72,23 +78,11 @@ def boom(mistakes):
         return 0 #stänger av spelet
 
 
-#print("Connected Modules:", connected_Modules()) # printar vilka moduler är inkopplade
-#print("Completed Modules:", Completed_modules()) # printar vilka moduler är avklarade
-#Solved(Completed_modules(),connected_Modules())
-#ha en loop som minskar sekunder och när sekunder blir noll minskar minuter, när minuter och sekunder == 0, boom. varför så? för varje sekund kan man checka för misstag?? lowkey dålig ide men en ide! lol
-
-#ta bort detta sen ofc
-
 buf = bytearray(128 * 64 // 8)
 
 Buffer = framebuf.FrameBuffer(buf, 128, 64, framebuf.MONO_HLSB)
 
 # Draw normal text into the small buffer
-
-
-
-
-
 
 
 def scale():
@@ -233,4 +227,3 @@ def main(minuter, sekunder):
     #time.sleep(1)
 main(0,5) #minuter sekunder
 #while True:
- #   print(connected_Modules())
