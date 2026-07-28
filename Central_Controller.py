@@ -64,4 +64,4 @@ def Boom(Mistakes):
 #Solved(Completed_modules(),Connected_Modules())
 #ha en loop som minskar sekunder och när sekunder blir noll minskar minuter, när minuter och sekunder == 0, boom. varför så? för varje sekund kan man checka för misstag?? lowkey dålig ide men en ide! lol
 
-#ta bort detta sen ofc
+#ta bort detta sen 
