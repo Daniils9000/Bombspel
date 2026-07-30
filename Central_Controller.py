@@ -1,4 +1,14 @@
 
+#Disclamer! BAD CODE BELOW!
+# många funktioner kan säkert slås ihop för finare kod: jag orkar inte
+# finns kommentarer, kan inte lova att dem förklarar saker bra nog  
+# if it aint broke dont fix it
+#
+# Något som hade kunnat förbättras som hade påverkat performance-n mycket positivt är scale funktionen, just nu itererar den en del av buffer kanvasen där man skriver in liten text, och sedan skannar den typ 
+# pixel för pixel och förstorar varje pixel liksom och gör bilden större, detta görs med 2 for loops som tankar performancen som Fa-an.
+
+
+
 import machine
 import framebuf
 import time
@@ -24,12 +34,12 @@ buzzer_pin = Pin(15, Pin.OUT)
 module_1 = Pin(9, Pin.IN) 
 module_2 = Pin(7, Pin.IN) 
 module_3 = Pin(22, Pin.IN) # modules siffror är definerade som om man hade läst en bok, timern är upp åt vänster, så module 1 är i mitten och upp, module 2 är höger upp, module 3 är vänster ner osv
-module_4 = Pin(19, Pin.IN)
-module_5 = Pin(26, Pin.IN)
+module_4 = Pin(19, Pin.IN) 
+module_5 = Pin(26, Pin.IN) 
 
 completed_1 = Pin(8, Pin.IN)
 completed_2 = Pin(6, Pin.IN) 
-completed_3 = Pin(21, Pin.IN) #Pinsen som är inkopplade till "jag är löst" output pinen på varje modul
+completed_3 = Pin(21, Pin.IN) #Pinsen som är inkopplade till "modulen är löst!" output pinen på varje modul
 completed_4 = Pin(18, Pin.IN)
 completed_5 = Pin(27, Pin.IN)
 
@@ -37,9 +47,8 @@ completed_5 = Pin(27, Pin.IN)
 module_list = [module_1, module_2, module_3, module_4, module_5] #Lista med alla moduler, kopplade och okopplade
 
 
-buf = bytearray(128 * 64 // 8) #skapar en kanvas för buffern basically
-
-buffer = framebuf.FrameBuffer(buf, 128, 64, framebuf.MONO_HLSB) #buffer där man skriver saker i och sedan gör dem sakerna större med scale()
+buf = bytearray(128 * 64 // 8)                                      #skapar en kanvas för buffern basically
+buffer = framebuf.FrameBuffer(buf, 128, 64, framebuf.MONO_HLSB)     #buffer där man skriver saker i och sedan gör dem sakerna större med scale()
 
 
 
