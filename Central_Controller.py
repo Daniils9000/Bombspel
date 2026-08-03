@@ -24,24 +24,24 @@ print(i2c.scan())
 from ssd1306 import SSD1306_I2C
 oled = SSD1306_I2C(128, 64, i2c)
 
-
-mistake_pin = Pin(0, Pin.IN) #Pin in i pico som är kopplad till alla modulers "damn de fucka upp" pin
-
 start_game_pin = Pin(1, Pin.IN) #pin från start knappen in till controllern
-
+game_is_on_pin = Pin(26,Pin.OUT)
+mistake_pin = Pin(0, Pin.IN) #Pin in i pico som är kopplad till alla modulers "damn de fucka upp" pin
 buzzer_pin = Pin(15, Pin.OUT)
+x_1_pin = Pin(2, Pin.OUT) #lyser upp första misstag LED (krysset)
+x_2_pin = Pin(3, Pin.OUT) #lyser upp andra
 
 module_1 = Pin(9, Pin.IN) 
 module_2 = Pin(7, Pin.IN) 
-module_3 = Pin(22, Pin.IN) # modules siffror är definerade som om man hade läst en bok, timern är upp åt vänster, så module 1 är i mitten och upp, module 2 är höger upp, module 3 är vänster ner osv
-module_4 = Pin(19, Pin.IN) 
-module_5 = Pin(26, Pin.IN) 
+module_3 = Pin(28, Pin.IN) # modules siffror är definerade som om man hade läst en bok, timern är upp åt vänster, så module 1 är i mitten och upp, module 2 är höger upp, module 3 är vänster ner osv
+module_4 = Pin(21, Pin.IN) 
+module_5 = Pin(19, Pin.IN) 
 
 completed_1 = Pin(8, Pin.IN)
 completed_2 = Pin(6, Pin.IN) 
-completed_3 = Pin(21, Pin.IN) #Pinsen som är inkopplade till "modulen är löst!" output pinen på varje modul
-completed_4 = Pin(18, Pin.IN)
-completed_5 = Pin(27, Pin.IN)
+completed_3 = Pin(27, Pin.IN) #Pinsen som är inkopplade till "modulen är löst!" output pinen på varje modul
+completed_4 = Pin(20, Pin.IN)
+completed_5 = Pin(18, Pin.IN)
 
 
 module_list = [module_1, module_2, module_3, module_4, module_5] #Lista med alla moduler, kopplade och okopplade
@@ -266,7 +266,8 @@ print(connected_modules())
 while True:
     time.sleep(0.03)
     print("game is on?") 
-    if start_game_pin.value() == 1:
+    if True: #start_game_pin.value() == 1:
+
         mistake_list = [] #sätter misstag = 0
         prep_time = 5
         minuter = 0
